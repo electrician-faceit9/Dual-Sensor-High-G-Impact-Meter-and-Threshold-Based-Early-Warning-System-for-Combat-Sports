@@ -216,9 +216,9 @@ Gönderim aralığı: ___ s
 
 1. ___, "Intelligent Life Guard: An IoT-Enabled Smart Helmet for Vital Monitoring & Fall Detection," *International Journal of Drug Delivery Technology*, 2026. doi: [10.25258/ijddt.16.35s.5](https://doi.org/10.25258/ijddt.16.35s.5)
 2. ___, "Contact-Triggered Active Bonnet System for Pedestrian Head Injury Mitigation: Multibody Modelling and Experimental Validation," *Sensors*, 2026. doi: [10.3390/s26154743](https://doi.org/10.3390/s26154743)
-3. ___, "Simultaneous Bench-Based Metrological Characterization of Smartwatches' Accelerometers for Accurate Measurement," *Technologies*, 2026. doi: ___
-4. ___, "Wearable Fall Detection System with Real-Time Localization and Notification Capabilities," *Sensors*, 2025. doi: ___
+3. C. Polvorinos-Fernández, M. Centeno-Cerrato, ___, I. Pavón, "Simultaneous Bench-Based Metrological Characterization of Smartwatches' Accelerometers for Accurate Measurement," *Technologies*, vol. 14, no. 6, art. 356, 2026. doi: [10.3390/technologies14060356](https://doi.org/10.3390/technologies14060356)
+4. C.-K. Tseng, S.-J. Huang, L.-J. Kau, "Wearable Fall Detection System with Real-Time Localization and Notification Capabilities," *Sensors*, vol. 25, no. 12, art. 3632, 2025. doi: [10.3390/s25123632](https://doi.org/10.3390/s25123632)
 5. ___, "Machine Learning-Based Framework for Pre-Impact Same-Level Fall and Fall-from-Height Detection in Construction Sites Using a Single Wearable Inertial Measurement Unit," *Biosensors*, 2025. doi: [10.3390/bios15090618](https://doi.org/10.3390/bios15090618)
 6. ___, "Square-ring mass triaxial piezoresistive accelerometer with decoupled sensing elements for matched three-axis performance," *Microsystem Technologies*, 2026. doi: [10.1007/s00542-026-06162-6](https://doi.org/10.1007/s00542-026-06162-6)
 
-> Not: Bu özet, 12 makalelik bir karşılaştırma tablosundaki çalışmalara dayanır. "Ele alınmamıştır" ifadeleri yalnızca bu küme için geçerlidir. Yazar adları ve eksik DOI'ler (___) yayıncı sayfalarından tamamlanacaktır.
+
