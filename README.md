@@ -205,3 +205,20 @@ Gönderim aralığı: ___ s
 11. **Montaj:** Kafa bandı ile kask montajı arasındaki tepe ivme farkı: ___
 12. **Δv referansı:** Düşürme testinde çarpma hızı düşme yüksekliğinden hesaplanacak. Hata kaynakları (sürtünme, sekme): ___
 13. **ADXL375 kartının doğrulanması:** DEVID ADXL345 ile aynı (0xE5). Durağanken Z ekseninin yaklaşık 20 LSB olması bekleniyor. Ölçülen: ___
+
+---
+
+## 7. Literatür özeti
+
+İncelenen çalışmalarda giyilebilir ataletsel algılayıcılarla düşme ve darbe tespiti yaygın olmakla birlikte, doğrulama çoğunlukla sınıflandırma başarımı ve gecikme ölçütleriyle yapılmış, algılayıcının ölçtüğü ivmenin bir referansa göre doğruluğu nadiren raporlanmıştır [4], [5]. Kask tabanlı bir IoT sistemi darbe ve düşmeyi algılayıp gerçek zamanlı uyarı göndermekte, ancak ivme ölçümünün doğruluğuna ilişkin bir değerlendirme sunmamaktadır [1]. Tepe kafa ivmesi ve HIC15 gibi kafa yaralanması ölçütleri araç-yaya çarpışması bağlamında çok gövdeli model ve manken deneyleriyle incelenmiş, giyilebilir bir algılayıcıyla ölçülmemiştir [2]. Referans ivmeölçerle algılayıcı düzeyinde metrolojik karakterizasyon yapan çalışma düşük genlik (1–4 m/s²) ve düşük frekans (1–8 Hz) aralığıyla sınırlı kalmış [3], yüksek g darbeler altında doyma ve ölçüm aralığı davranışı ise algılayıcı tasarımı çalışmalarında ele alınmamıştır [6]. Bu proje, ±200 g'lik bir ivmeölçeri kontrollü düşürme deneylerinde düşme yüksekliğinden hesaplanan çarpma hızına göre doğrulayarak ve doyan olayları işaretleyerek, incelenen çalışmalardaki bu boşluğun algılayıcı düzeyindeki kısmına yanıt vermeyi amaçlamaktadır.
+
+### Kaynaklar
+
+1. ___, "Intelligent Life Guard: An IoT-Enabled Smart Helmet for Vital Monitoring & Fall Detection," *International Journal of Drug Delivery Technology*, 2026. doi: [10.25258/ijddt.16.35s.5](https://doi.org/10.25258/ijddt.16.35s.5)
+2. ___, "Contact-Triggered Active Bonnet System for Pedestrian Head Injury Mitigation: Multibody Modelling and Experimental Validation," *Sensors*, 2026. doi: [10.3390/s26154743](https://doi.org/10.3390/s26154743)
+3. ___, "Simultaneous Bench-Based Metrological Characterization of Smartwatches' Accelerometers for Accurate Measurement," *Technologies*, 2026. doi: ___
+4. ___, "Wearable Fall Detection System with Real-Time Localization and Notification Capabilities," *Sensors*, 2025. doi: ___
+5. ___, "Machine Learning-Based Framework for Pre-Impact Same-Level Fall and Fall-from-Height Detection in Construction Sites Using a Single Wearable Inertial Measurement Unit," *Biosensors*, 2025. doi: [10.3390/bios15090618](https://doi.org/10.3390/bios15090618)
+6. ___, "Square-ring mass triaxial piezoresistive accelerometer with decoupled sensing elements for matched three-axis performance," *Microsystem Technologies*, 2026. doi: [10.1007/s00542-026-06162-6](https://doi.org/10.1007/s00542-026-06162-6)
+
+> Not: Bu özet, 12 makalelik bir karşılaştırma tablosundaki çalışmalara dayanır. "Ele alınmamıştır" ifadeleri yalnızca bu küme için geçerlidir. Yazar adları ve eksik DOI'ler (___) yayıncı sayfalarından tamamlanacaktır.
