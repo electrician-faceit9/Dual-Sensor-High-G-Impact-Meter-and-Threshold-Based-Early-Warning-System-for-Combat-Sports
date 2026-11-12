@@ -32,13 +32,19 @@ Excel hâli: [Malzeme_Durum_Tablosu.xlsx](Malzeme_Durum_Tablosu.xlsx)
 
 ## ADXL375 Gelmeden Yapılacaklar
 
-Literatür bölümü için 5 cümlelik özet
+- [ ] **Çalışma ortamını kur:** Arduino IDE'ye ESP32 paketini yükle, iki ESP32-C3'e de `01_merhaba.ino` yükleyip seri monitörde çalıştığını gör.
+- [ ] **Lehim ve güç rayları:** ESP32-C3'lere ve GY-521'e header pinleri lehimle. ESP32'yi breadboard'a tak, 3V3/GND'yi raylara bağla ve 3.3 V ölç.
+- [ ] **MPU6050'yi test et:** I2C ile bağla (SDA → GPIO8, SCL → GPIO9). Tarayıcıda 0x68'i gör, kart masada dururken az ≈ +1 g okuduğunu doğrula.
+- [ ] **ESP-NOW hattını test et:** Verici ve alıcı kodlarını yükle. MPU6050 verisinin kablosuz gelip gelmediğine ve kayıp paket sayısına bak.
+- [ ] **Güç hattını hazırla:** TP4056'daki PROG direncini 4.7 kΩ ile değiştir, pilin gerilimini ve kutbunu ölç, şarj akımını kontrol et. Pili ESP32'ye henüz bağlama.
+
+Literatür bölümü için 5 cümlelik özet:
 
 İncelenen çalışmalarda giyilebilir ataletsel algılayıcılarla düşme ve darbe tespiti yaygın olmakla birlikte, doğrulama çoğunlukla sınıflandırma başarımı ve gecikme ölçütleriyle yapılmış, algılayıcının ölçtüğü ivmenin bir referansa göre doğruluğu nadiren raporlanmıştır [4], [5]. Kask tabanlı bir IoT sistemi darbe ve düşmeyi algılayıp gerçek zamanlı uyarı göndermekte, ancak ivme ölçümünün doğruluğuna ilişkin bir değerlendirme sunmamaktadır [1]. Tepe kafa ivmesi ve HIC15 gibi kafa yaralanması ölçütleri araç-yaya çarpışması bağlamında çok gövdeli model ve manken deneyleriyle incelenmiş, giyilebilir bir algılayıcıyla ölçülmemiştir [2]. Referans ivmeölçerle algılayıcı düzeyinde metrolojik karakterizasyon yapan çalışma düşük genlik (1–4 m/s²) ve düşük frekans (1–8 Hz) aralığıyla sınırlı kalmış [3], yüksek g darbeler altında doyma ve ölçüm aralığı davranışı ise algılayıcı tasarımı çalışmalarında ele alınmamıştır [6]. Bu proje, ±200 g’lik bir ivmeölçeri kontrollü düşürme deneylerinde düşme yüksekliğinden hesaplanan çarpma hızına göre doğrulayarak ve doyan olayları işaretleyerek, incelenen çalışmalardaki bu boşluğun algılayıcı düzeyindeki kısmına yanıt vermeyi amaçlamaktadır.
 
-Kaynak listesi
+Kaynak listesi:
 
-Yazar adları tabloda yok, o yüzden ___ bıraktım. DOI’leri senin mesajındaki bağlantılardan aldım, bağlantısı olmayanlarda ___ yazdım.
+Yazar adları tabloda yok, o yüzden ___ bıraktım.
 
 [1] ___, “Intelligent Life Guard: An IoT-Enabled Smart Helmet for Vital Monitoring & Fall Detection,” International Journal of Drug Delivery Technology, 2026. doi: 10.25258/ijddt.16.35s.5
 
@@ -51,9 +57,3 @@ Yazar adları tabloda yok, o yüzden ___ bıraktım. DOI’leri senin mesajında
 [5] ___, “Machine Learning-Based Framework for Pre-Impact Same-Level Fall and Fall-from-Height Detection in Construction Sites Using a Single Wearable Inertial Measurement Unit,” Biosensors, 2025. doi: 10.3390/bios15090618
 
 [6] ___, “Square-ring mass triaxial piezoresistive accelerometer with decoupled sensing elements for matched three-axis performance,” Microsystem Technologies, 2026. doi: 10.1007/s00542-026-06162-6
-- [ ] **Çalışma ortamını kur:** Arduino IDE'ye ESP32 paketini yükle, iki ESP32-C3'e de `01_merhaba.ino` yükleyip seri monitörde çalıştığını gör.
-- [ ] **Lehim ve güç rayları:** ESP32-C3'lere ve GY-521'e header pinleri lehimle. ESP32'yi breadboard'a tak, 3V3/GND'yi raylara bağla ve 3.3 V ölç.
-- [ ] **MPU6050'yi test et:** I2C ile bağla (SDA → GPIO8, SCL → GPIO9). Tarayıcıda 0x68'i gör, kart masada dururken az ≈ +1 g okuduğunu doğrula.
-- [ ] **ESP-NOW hattını test et:** Verici ve alıcı kodlarını yükle. MPU6050 verisinin kablosuz gelip gelmediğine ve kayıp paket sayısına bak.
-- [ ] **Güç hattını hazırla:** TP4056'daki PROG direncini 4.7 kΩ ile değiştir, pilin gerilimini ve kutbunu ölç, şarj akımını kontrol et. Pili ESP32'ye henüz bağlama.
-
