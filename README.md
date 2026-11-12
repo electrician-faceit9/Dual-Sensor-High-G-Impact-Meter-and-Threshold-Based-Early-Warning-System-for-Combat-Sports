@@ -221,4 +221,4 @@ Gönderim aralığı: ___ s
 5. ___, "Machine Learning-Based Framework for Pre-Impact Same-Level Fall and Fall-from-Height Detection in Construction Sites Using a Single Wearable Inertial Measurement Unit," *Biosensors*, 2025. doi: [10.3390/bios15090618](https://doi.org/10.3390/bios15090618)
 6. ___, "Square-ring mass triaxial piezoresistive accelerometer with decoupled sensing elements for matched three-axis performance," *Microsystem Technologies*, 2026. doi: [10.1007/s00542-026-06162-6](https://doi.org/10.1007/s00542-026-06162-6)
 
-
+> Not: Bu özet, 12 makalelik bir [karşılaştırma tablosundaki](literature-comparison.pdf) çalışmalara dayanır. "Ele alınmamıştır" ifadeleri yalnızca bu küme için geçerlidir.
