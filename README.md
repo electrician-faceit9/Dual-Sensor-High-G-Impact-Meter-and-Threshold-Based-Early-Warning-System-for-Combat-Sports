@@ -142,7 +142,7 @@ Ayrıntılı not: [Hafta 1: Çalışma ortamı kurulumu](docs/hafta1_ortam_kurul
 
 ### Kablosuz yöntem seçimi
 
-Sensör düğümü ile alıcı arasında **ESP-NOW** kullanılıyor. ESP-NOW, iki ESP32 arasında erişim noktası (modem) ve bağlantı kurma aşaması olmadan doğrudan çerçeve gönderir. Darbe olayında ilk paketin, bağlantı kurulumunu beklemeden çıkmasını sağlar. Bir paket 250 bayta kadar veri taşıyabildiği için olay özetinin tamamı (aşağıdaki 29 bayt) tek pakete sığar. Alıcı da bir ESP32-C3 olduğu için telefon uygulaması gerekmez, veri USB üzerinden doğrudan bilgisayara aktarılır. BLE alternatifinde bağlantı aralığı (en az 7.5 ms, iOS'ta en az 15 ms) ve varsayılan 20 baytlık bildirim yükü, paketin bölünmesini ve uygulama tarafında ek iş gerektirirdi. Wi-Fi ise bir erişim noktasına bağlı olmayı gerektirir. ESP-NOW'un dezavantajı ayrı bir alıcı kart gerektirmesi ve teslimatı garanti etmemesidir. Kayıp paketler sıra numarasıyla tespit edilir. Hedef uçtan uca gecikme ≤200 ms (ölçülen: ___ ms). Menzil ve kayıp oranı henüz ölçülmedi: ___
+Sensör düğümü ile alıcı arasında **ESP-NOW** kullanılıyor. ESP-NOW, iki ESP32 arasında erişim noktası (modem) ve bağlantı kurma aşaması olmadan doğrudan çerçeve gönderir. Darbe olayında ilk paketin, bağlantı kurulumunu beklemeden çıkmasını sağlar. Bir paket 250 bayta kadar veri taşıyabildiği için olay özetinin tamamı (aşağıdaki 29 bayt) tek pakete sığar. Alıcı da bir ESP32-C3 olduğu için telefon uygulaması gerekmez, veri USB üzerinden doğrudan bilgisayara aktarılır. BLE alternatifinde bağlantı aralığı (en az 7.5 ms, iOS'ta en az 15 ms) ve varsayılan 20 baytlık bildirim yükü, paketin bölünmesini ve uygulama tarafında ek iş gerektirirdi. Wi-Fi ise bir erişim noktasına bağlı olmayı gerektirir. ESP-NOW'un dezavantajı ayrı bir alıcı kart gerektirmesi ve teslimatı garanti etmemesidir. Kayıp paketler sıra numarasıyla tespit edilir. Hedef uçtan uca gecikme ≤200 ms (ölçülen: Tek yön tahmini ortalama 1.53 ms, en çok 4.48 ms (RTT/2, kartlar yakın) ms). Yakın mesafede kayıp %0 (1000/1000). Menzil testi: ___
 
 ### Genel kurallar
 - Bayt sırası: little-endian. Yapı `__attribute__((packed))`, dolgu baytı yok.
@@ -222,3 +222,7 @@ Gönderim aralığı: ___ s
 6. ___, "Square-ring mass triaxial piezoresistive accelerometer with decoupled sensing elements for matched three-axis performance," *Microsystem Technologies*, 2026. doi: [10.1007/s00542-026-06162-6](https://doi.org/10.1007/s00542-026-06162-6)
 
 > Not: Bu özet, 12 makalelik bir [karşılaştırma tablosundaki](literature-comparison.pdf) çalışmalara dayanır. "Ele alınmamıştır" ifadeleri yalnızca bu küme için geçerlidir.
+
+## Haftalık Notlar
+
+- [Hafta 4: Sensörsüz ESP-NOW testi](docs/hafta4_espnow_testi.md)
