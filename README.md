@@ -223,6 +223,17 @@ Gönderim aralığı: ___ s
 
 > Not: Bu özet, 12 makalelik bir [karşılaştırma tablosundaki](literature-comparison.pdf) çalışmalara dayanır. "Ele alınmamıştır" ifadeleri yalnızca bu küme için geçerlidir.
 
+## Hedef Değerler
+
+| Alan | Hedef | Gerekçe |
+|---|---|---|
+| Darbe eşiği | ___ | Literatür karşılaştırmasındaki hiçbir çalışma dövüş sporunda kafa darbesi için eşik vermiyor; tek kafa ivmesi verisi araç-yaya çarpışmasından (tepe ivme 84 m/s², HIC15 264) ve eşik olarak kullanılamaz. |
+| Örnekleme hızı | 3200 Hz | Literatürdeki değerler (50 Hz akıllı saat, 100 Hz düşme tespiti) yavaş vücut hareketi için; darbe için kaynakta değer yok, bu yüzden ADXL375 veri sayfasındaki en yüksek hız (3200 Hz) seçildi. |
+| Gecikme (darbe → uyarı) | ___ | Literatürdeki tek eşik (130 ms hava yastığı şişme süresi) iş güvenliği bağlamında, dövüş sporuna uymuyor. Ölçtüğümüz kablosuz tek yön tahmini: ort 1.53 ms, en çok 4.48 ms (RTT/2, yakın mesafe). |
+| Ortalama akım | ___ | Literatürdeki tek değer 5 mA (100 Hz, GPS/NB-IoT'li düşme cihazı); bizim ESP32-C3 + Wi-Fi donanımımızdan farklı, akım ölçülünce yazılacak. |
+
+Kaynaklar: literature-comparison.pdf içindeki makaleler ve ADXL375 veri sayfası (Analog Devices).
+
 ## Haftalık Notlar
 
 - [Hafta 4: Sensörsüz ESP-NOW testi](docs/hafta4_espnow_testi.md)
