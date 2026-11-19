@@ -223,6 +223,26 @@ Gönderim aralığı: ___ s
 
 > Not: Bu özet, 12 makalelik bir [karşılaştırma tablosundaki](literature-comparison.pdf) çalışmalara dayanır. "Ele alınmamıştır" ifadeleri yalnızca bu küme için geçerlidir.
 
+## Literatür Karşılaştırması
+
+Ayrıntılı tablo: [literature-comparison.pdf](literature-comparison.pdf)
+
+### 1. En yakın çalışmalar
+- **Genel olarak en yakın:** *Wearable Fall Detection System with Real-Time Localization and Notification Capabilities* (Sensors, 2025). Giyilebilir bir mikrodenetleyici ve ataletsel sensör kullanıyor, olayı cihazın üzerinde düşük karmaşıklıklı bir algoritmayla (sonlu durum makinesi) tespit ediyor ve kablosuz uyarı gönderiyor. Bizim mimarimiz de aynı.
+- **Ölçtüğü büyüklük en yakın olan:** *Contact-Triggered Active Bonnet System for Pedestrian Head Injury Mitigation* (Sensors, 2026). Tablodaki çalışmalardan tepe kafa ivmesi ve HIC15 kullanan tek çalışma bu. Bizim ÖZET paketimizde de `tepe_ivme_bilesik` ve `hic15` alanları var.
+- **Kafaya takılan tek çalışma:** *Intelligent Life Guard: An IoT-Enabled Smart Helmet* (2026). Ancak darbe ölçmüyor, düşme ve vital bulguları izliyor.
+
+### 2. Projemizin cevap verdiği boşluk
+Tablonun kendi özeti ortak boşluğu şöyle tarif ediyor: hiçbir çalışma yüksek g aralığını hedeflemiyor ve kafa darbesi sensörü için kalibre edilmiş düşürme testi yapmıyor. Kaput çalışması da giyilebilir sensör yerine simülasyon ve manken kullanıyor. Bizim proje bu boşluğa doğrudan yöneliyor: kafaya takılan, ±200 g aralığındaki ADXL375 ile darbeyi ölçmek ve eşiğe göre triyaj yapmak. Düşürme testi sonuçları: ___
+
+### 3. Ortak ölçütler
+| Ölçüt | Kullanan çalışma | Bizde |
+|---|---|---|
+| Tepe kafa ivmesi, HIC15 | Active Bonnet (Sensors, 2026) | ÖZET paketinde var, ölçüm ___ |
+| Örnekleme hızı | Smartwatch metrolojisi (50 Hz), Konumlu düşme sistemi (100 Hz) | Hedef 3200 Hz |
+| Ortalama akım | Konumlu düşme sistemi (5 mA) | ___ |
+| Gecikme / önceden uyarı süresi | Ön-çarpma düşme (Biosensors, 2025): pencere başına 1.51×10⁻³ ms, 402/640 ms öncü süre |
+
 ## Hedef Değerler
 
 | Alan | Hedef | Gerekçe |
