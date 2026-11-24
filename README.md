@@ -69,7 +69,7 @@ PDF hâli: [Malzeme_Blok_Semasi.pdf](Malzeme_Blok_Semasi.pdf)
 
 | Parça | Blok şemadaki görevi | Durum | Eksikse yapılacak iş | Yedek seçenek (ölçüm aralığı, arayüz) |
 |---|---|---|---|---|
-| Adafruit ADXL375 (5374) | Asıl darbe sensörü, yüksek g ivme ölçümü | ⏳ Sipariş edildi | Kargoyu takip et. Gelince header lehimle, SPI testi yap (DEVID 0xE5, durağanken Z ≈ 20 LSB) | H3LIS331DL: ±100/200/400 g, SPI/I2C. Yazılım geliştirme için ADXL345: ±16 g, SPI/I2C |
+| Adafruit ADXL375 (5374) | Asıl darbe sensörü, yüksek g ivme ölçümü | ✅ Elimde | Header lehimle, 02_adxl375_olcum ile SPI testi yap (DEVID 0xE5, durağanken Z ≈ 20 LSB), sonra 09_adxl375_int_test ile INT (GPIO3) testi | H3LIS331DL: ±100/200/400 g, SPI/I2C. Yazılım geliştirme için ADXL345: ±16 g, SPI/I2C |
 | ESP32-C3 SuperMini (×2) | #1 sensör düğümü; #2 alıcı (USB ile bilgisayara) | ✅ Elimde | — | ESP32-S3 geliştirme kartı: ESP-NOW, SPI/I2C |
 | GY-521 MPU6050 | Dönme (jiroskop) verisi + ikincil ivme | ✅ Elimde | — | LSM6DSO32: ivme ±32 g, jiroskop ±2000 °/s, SPI/I2C |
 | USB-C veri kablosu | Programlama, seri port, alıcı-bilgisayar bağlantısı | ✅ Elimde | — | Veri hatlı başka bir USB-C kablo |
