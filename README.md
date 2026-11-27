@@ -14,7 +14,7 @@ Dövüş sporlarında kafa darbelerini anlık ölçen, giyilebilir darbe ölçer
 
 - Sensör düğümünün donanımı: ADXL375 (±200 g, SPI), MPU6050 (6 eksen, I2C), ESP32-C3 SuperMini, Li-Po pil, TP4056 şarj ve koruma modülü, açma/kapama anahtarı.
 - Gömülü yazılım:
-  - ADXL375'i SPI ile hedef 3200 Hz'de okumak (gerçekleşen hız: ___ Hz)
+  - ADXL375'i SPI ile hedef 3200 Hz'de okumak (gerçekleşen hız: 3187–3190 örnek/s, FIFO taşması 0; bkz. Hafta 5)
   - Halka tamponda darbe öncesi ve sonrası veriyi tutmak
   - Eşik aşımında olayı tetiklemek (eşik: ___ g, önerideki başlangıç değeri 10 g, doğrulanmalı)
   - Tepe ivme, darbe süresi, Δv ve HIC15'i hesaplamak
@@ -142,7 +142,35 @@ Ayrıntılı not: [Hafta 1: Çalışma ortamı kurulumu](docs/hafta1_ortam_kurul
 
 ### Kablosuz yöntem seçimi
 
-Sensör düğümü ile alıcı arasında **ESP-NOW** kullanılıyor. ESP-NOW, iki ESP32 arasında erişim noktası (modem) ve bağlantı kurma aşaması olmadan doğrudan çerçeve gönderir. Darbe olayında ilk paketin, bağlantı kurulumunu beklemeden çıkmasını sağlar. Bir paket 250 bayta kadar veri taşıyabildiği için olay özetinin tamamı (aşağıdaki 29 bayt) tek pakete sığar. Alıcı da bir ESP32-C3 olduğu için telefon uygulaması gerekmez, veri USB üzerinden doğrudan bilgisayara aktarılır. BLE alternatifinde bağlantı aralığı (en az 7.5 ms, iOS'ta en az 15 ms) ve varsayılan 20 baytlık bildirim yükü, paketin bölünmesini ve uygulama tarafında ek iş gerektirirdi. Wi-Fi ise bir erişim noktasına bağlı olmayı gerektirir. ESP-NOW'un dezavantajı ayrı bir alıcı kart gerektirmesi ve teslimatı garanti etmemesidir. Kayıp paketler sıra numarasıyla tespit edilir. Hedef uçtan uca gecikme ≤200 ms (ölçülen: Tek yön tahmini ortalama 1.53 ms, en çok 4.48 ms (RTT/2, kartlar yakın) ms). Yakın mesafede kayıp %0 (1000/1000). Menzil testi: ___
+Sensör düğümü ile alıcı arasında **ESP-NOW** kullanılıyor. ESP-NOW, iki ESP32 arasında erişim noktası (modem) ve bağlantı kurma aşaması olmadan doğrudan çerçeve gönderir. Darbe olayında ilk paketin, bağlantı kurulumunu beklemeden çıkmasını sağlar. Bir paket 250 bayta kadar veri taşıyabildiği için olay özetinin tamamı (aşağıdaki 29 bayt) tek pakete sığar. Alıcı da bir ESP32-C3 olduğu için telefon uygulaması gerekmez, veri USB üzerinden doğrudan bilgisayara aktarılır. BLE alternatifinde bağlantı aralığı (en az 7.5 ms, iOS'ta en az 15 ms) ve varsayılan 20 baytlık bildirim yükü, paketin bölünmesini ve uygulama tarafında ek iş gerektirirdi. Wi-Fi ise bir erişim noktasına bağlı olmayı gerektirir. ESP-NOW'un dezavantajı ayrı bir alıcı kart gerektirmesi ve teslimatı garanti etmemesidir. Kayıp paketler sıra numarasıyla tespit edilir. Hedef uçtan uca gecikme: ___ (kaynağı olan bir değer bulunamadı; bkz. Hedef Değerler) (Hafta 4'te ölçülen: Tek yön tahmini ortalama 1.53 ms, en çok 4.48 ms (RTT/2, kartlar yakın) ms). Yakın mesafede kayıp %0 (1000/1000). Menzil testi: ___
+
+### Ön sonuç: gerçek sensör verisiyle gecikme ve kayıp (Hafta 5)
+
+Breadboard'daki sensör düğümü ADXL375'i 3200 Hz, MPU6050'yi 1 kHz okurken 29 baytlık 0x01 paketini gerçek sensör verisiyle 100 ms aralıkla 1000 kez gönderdi. Ortam etkisini ayırmak için aynı yerde, aynı mesafede sensörsüz Hafta 4 kodu da yeniden çalıştırıldı (kontrol). Gecikme, vericinin kendi saatiyle gidiş-dönüş süresidir (RTT); tek yön RTT/2 ile tahmin edilir.
+
+| Ölçüm | Hafta 4: sensörsüz, ilk ortam | Kontrol: sensörsüz, aynı ortam | Gerçek sensör verisiyle |
+|---|---|---|---|
+| Kod | 06 / 07 | 06 / 07 | 04 / 05 |
+| Kartlar arası mesafe | yan yana | ~20 cm | ~20 cm |
+| Ortam | ___ | kalabalık kafe: 3–4 Wi-Fi ağı, çok sayıda elektronik cihaz, kahve makineleri | aynı kafe, aynı oturum |
+| Gönderilen / yankı alınan | 1000 / 1000 | 1000 / 996 | 1000 / 976 |
+| Gidiş-dönüş kaybı | %0 | %0.4 | %2.4 |
+| RTT min / ort / maks | 2.79 / 3.06 / 8.96 ms | 2.33 / 3.49 / 21.00 ms | 2.62 / 4.62 / 40.17 ms |
+| RTT p50 / p95 / p99 (250 µs kutu) | ≤3.00 / ≤4.25 / ≤5.75 ms | ≤2.75 / ≤6.75 / ≤12.25 ms | ≤3.00 / ≤12.50 / ≤28.50 ms |
+| RTT'si 10 ms'yi aşan paket | 0 | 14 | 61 |
+| Tek yön tahmini (RTT/2) min / ort / maks | 1.40 / 1.53 / 4.48 ms | 1.17 / 1.74 / 10.50 ms | 1.31 / 2.31 / 20.09 ms |
+| Test sırasında ADXL375 örnek/s, FIFO taşması | — | — | 3187.8–3191.2, 0 |
+| Test sırasında MPU6050 örnek/s | — | — | 991.8–994.8 |
+| Durağanken 100 ms'lik penceredeki tepe bileşke ivme | — | — | 2.06–4.36 g |
+
+Darbe denemesi (ADXL375 kartına kalemle vurma): 9 vuruşta 10 olay paketi gönderildi, 10'unun yankısı alındı. Bir vuruş iki olay üretmiş; hangisi olduğu logdan ayrılamıyor. Tepe bileşke ivme 10.19–23.77 g. Tetikten yankıya süre 102.7–104.4 ms; bunun yaklaşık 100 ms'si tetikten sonraki 320 örneklik özet penceresidir.
+
+Gözlemler:
+- Sensörsüz kontrol de Hafta 4'ten kötü çıktı; ölçüm ortamı sonucu etkiliyor. Bu testler kalabalık bir kafede, birden fazla Wi-Fi ağının olduğu 2.4 GHz ortamında yapıldı. Dövüş sporu salonunda da seyirci telefonları ve Wi-Fi ağları olacağı için bu, sessiz bir odadan daha zorlu bir koşul.
+- Aynı ortamda sensör okuması açıkken ortanca RTT değişmedi (≤3.00 ve ≤2.75 ms), uzun gecikmeler arttı (10 ms'yi aşan paket 61 ve 14).
+- Sensörlü testteki 24 kaybın 20'si sıra 122–169 arasında, yaklaşık 5 s'lik bir patlamada. Kalan pakette 4 kayıp var, kontrolle aynı düzeyde. Patlamanın nedeni tek koşuyla ayrılamadı.
+- Alıcının logunun olduğu aralıkta kaybolan paketlerin hiçbiri alıcıya ulaşmamış; kayıp vericiden alıcıya giden yolda.
+- Her koşu bir kez yapıldı. Ham loglar: [docs/veri/hafta5](docs/veri/hafta5). Ayrıntı: [Hafta 5 notu](docs/hafta5_sensor_dogrulama.md).
 
 ### Genel kurallar
 - Bayt sırası: little-endian. Yapı `__attribute__((packed))`, dolgu baytı yok.
@@ -167,7 +195,7 @@ Sensör düğümü ile alıcı arasında **ESP-NOW** kullanılıyor. ESP-NOW, ik
 | `delta_v` | 2 | uint16 | mm/s | Darbe penceresinde ivmenin integrali |
 | `hic15` | 2 | uint16 | — | HIC15 (birimsiz) |
 | `seviye` | 1 | uint8 | — | 0 = Yeşil, 1 = Sarı, 2 = Kırmızı. Eşikler: ___ |
-| `bayraklar` | 1 | uint8 | bit alanı | bit0 ADXL375 doydu, bit1 MPU6050 doydu, bit2 düşük pil, bit3 tampon taştı, bit4-7 ayrılmış |
+| `bayraklar` | 1 | uint8 | bit alanı | bit0 ADXL375 doydu, bit1 MPU6050 doydu, bit2 düşük pil, bit3 tampon taştı, bit4 test paketi (periyodik ölçüm paketi, darbe değil), bit5-7 ayrılmış |
 | `pil_mv` | 2 | uint16 | mV | Pil gerilimi |
 | **Toplam** | **29** | | | |
 
@@ -194,7 +222,7 @@ Gönderim aralığı: ___ s
 
 1. **Tetik eşiği:** Başlangıç değeri 10 g [doğrulanmalı]. Günlük hareketlerde (koşma, zıplama) yanlış alarm sayısı: ___
 2. **Seviye eşikleri:** Yeşil / Sarı / Kırmızı sınırları hangi ölçüte (tepe g, HIC15, Δv) ve hangi değerlere göre belirlenecek? ___
-3. **Örnekleme hızı:** ADXL375 3200 Hz'de FIFO ile kayıpsız okunabiliyor mu? Ölçülen örnek/s: ___
+3. **Örnekleme hızı:** ADXL375 3200 Hz'de FIFO ile kayıpsız okunabiliyor mu? Ölçülen örnek/s: 3187–3190, FIFO taşması 0 (breadboard, Hafta 5). Bu hızda durağan gürültü std ≈ 15/15/20 LSB (X/Y/Z), 800 Hz'te yarısı; hız ile gürültü arasındaki seçim açık
 4. **HIC15 nerede hesaplanacak:** Sensör düğümünde mi, bilgisayarda mı? Düğümde hesaplanırsa işlem süresi: ___ ms
 5. **Ham veri:** Yalnız olay özeti yeterli mi, yoksa darbe penceresinin ham dalga formu da (birden fazla pakette) gönderilmeli mi?
 6. **Zaman senkronizasyonu:** Vericinin µs saati ile alıcının/bilgisayarın saati nasıl eşleştirilecek? Gecikme ölçümü bu eşleştirmeye bağlı.
@@ -245,15 +273,19 @@ Tablonun kendi özeti ortak boşluğu şöyle tarif ediyor: hiçbir çalışma y
 
 ## Hedef Değerler
 
-| Alan | Hedef | Gerekçe |
-|---|---|---|
-| Darbe eşiği | ___ | Literatür karşılaştırmasındaki hiçbir çalışma dövüş sporunda kafa darbesi için eşik vermiyor; tek kafa ivmesi verisi araç-yaya çarpışmasından (tepe ivme 84 m/s², HIC15 264) ve eşik olarak kullanılamaz. |
-| Örnekleme hızı | 3200 Hz | Literatürdeki değerler (50 Hz akıllı saat, 100 Hz düşme tespiti) yavaş vücut hareketi için; darbe için kaynakta değer yok, bu yüzden ADXL375 veri sayfasındaki en yüksek hız (3200 Hz) seçildi. |
-| Gecikme (darbe → uyarı) | ___ | Literatürdeki tek eşik (130 ms hava yastığı şişme süresi) iş güvenliği bağlamında, dövüş sporuna uymuyor. Ölçtüğümüz kablosuz tek yön tahmini: ort 1.53 ms, en çok 4.48 ms (RTT/2, yakın mesafe). |
-| Ortalama akım | ___ | Literatürdeki tek değer 5 mA (100 Hz, GPS/NB-IoT'li düşme cihazı); bizim ESP32-C3 + Wi-Fi donanımımızdan farklı, akım ölçülünce yazılacak. |
+Kural: kaynağı olmayan değer ___ bırakıldı. "Ölçülen" değerler Hafta 5 breadboard testlerinden geliyor ve hedef değil, hedefi sınamak için kullanılacak.
 
-Kaynaklar: literature-comparison.pdf içindeki makaleler ve ADXL375 veri sayfası (Analog Devices).
+| Alan | Hedef | Gerekçe | Kaynak |
+|---|---|---|---|
+| Darbe eşiği | ___ | Karşılaştırmadaki çalışmaların hiçbiri dövüş sporunda kafa darbesi için eşik vermiyor. Ölçülen alt sınır: kart dururken 100 ms'lik penceredeki tepe bileşke ivme 2.06–4.36 g; eşik bunun üstünde olmalı. Yazılımdaki 10 g yalnız test değeri. | literature-comparison.pdf; Hafta 5 ölçümü |
+| Seviye sınırları (Yeşil / Sarı / Kırmızı) | ___ | Tablodaki tek kafa ivmesi verisi araç-yaya çarpışmasından (tepe 84 m/s², HIC15 264) ve simülasyon/manken ile elde edilmiş; giyilebilir sensörle dövüş sporu için sınır olarak kullanılamaz. | Active Bonnet (Sensors, 2026) |
+| Örnekleme hızı | 3200 Hz | Literatürdeki 50 Hz ve 100 Hz yavaş vücut hareketi için; darbe için değer yok. ADXL375'in en yüksek çıkış hızı seçildi. Ölçülen: 3187–3194 örnek/s, FIFO taşması 0. Bu hızda durağan gürültü std ≈ 15/15/20 LSB (X/Y/Z), 800 Hz'te yarısı. | ADXL375 veri sayfası (Analog Devices); Smartwatch metrolojisi (50 Hz), Konumlu düşme sistemi (100 Hz) |
+| Gecikme (darbe → uyarı) | ___ | Literatürdeki tek eşik 130 ms hava yastığı şişme süresi; iş güvenliği bağlamında, dövüş sporuna uymuyor. Ölçülen: tetikten yankıya 102.7–104.4 ms (≈100 ms özet penceresi dahil); kablosuz tek yön tahmini ortanca ≈1.4 ms (kalabalık kafe, RTT/2). | Ön-çarpma düşme (Biosensors, 2025); Hafta 5 ölçümü |
+| Ortalama akım | ___ | Literatürdeki tek değer 5 mA (100 Hz, GPS/NB-IoT'li düşme cihazı); ESP32-C3 + ESP-NOW donanımımızdan farklı. Akım henüz ölçülmedi. | Konumlu düşme sistemi |
+
+Kaynaklar: literature-comparison.pdf içindeki makaleler, ADXL375 veri sayfası (Analog Devices) ve Hafta 5 ölçümleri ([docs/hafta5_sensor_dogrulama.md](docs/hafta5_sensor_dogrulama.md)).
 
 ## Haftalık Notlar
 
 - [Hafta 4: Sensörsüz ESP-NOW testi](docs/hafta4_espnow_testi.md)
+- [Hafta 5: Sensörlerin breadboard'da doğrulanması](docs/hafta5_sensor_dogrulama.md)

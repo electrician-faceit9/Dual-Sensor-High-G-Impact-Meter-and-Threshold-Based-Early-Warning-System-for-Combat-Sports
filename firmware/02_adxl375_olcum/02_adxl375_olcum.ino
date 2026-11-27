@@ -170,12 +170,34 @@ void setup() {
   float mx = (float)sx / KAL_ORNEK, my = (float)sy / KAL_ORNEK, mz = (float)sz / KAL_ORNEK;
   ofX = mx; ofY = my; ofZ = mz - LSB_PER_G;   // Z ekseninde +1 g varsayımı (s. 28)
   Serial.printf("Durgun ortalama (LSB): X=%.2f Y=%.2f Z=%.2f\n", mx, my, mz);
+
+  // İlk ham değerler: önce 20 örnek okunur, sonra yazdırılır (yazarken FIFO okunmadığı için)
+  // Veri biçimi: her eksen 16 bit işaretli (ikiye tümleyen), sağa yaslı, 1 LSB ≈ 1/20.5 g (s. 3, 24)
+  const int ILK = 20;
+  int16_t ix[ILK], iy[ILK], iz[ILK];
+  int al = 0;
+  while (al < ILK) {
+    int n = oku(R_FIFO_STATUS) & 0x3F;
+    for (int k = 0; k < n && al < ILK; k++) { okuXYZ(ix[al], iy[al], iz[al]); al++; }
+  }
+  Serial.println("# Ilk ham degerler (3200 Hz, ardisik ornekler)");
+  Serial.println("ornek,x_lsb,y_lsb,z_lsb,x_g,y_g,z_g");
+  for (int k = 0; k < ILK; k++) {
+    Serial.printf("%d,%d,%d,%d,%.2f,%.2f,%.2f\n", k, ix[k], iy[k], iz[k],
+                  ix[k] / LSB_PER_G, iy[k] / LSB_PER_G, iz[k] / LSB_PER_G);
+  }
+  while (oku(R_FIFO_STATUS) & 0x3F) { int16_t a, b, c; okuXYZ(a, b, c); }  // yazdırırken biriken eski veriyi at
+  oku(R_INT_SOURCE);                                                      // taşma bayrağını temizle
+
   Serial.println("Hazir. Olcum basladi.");
 }
 
 // ---------------- Ana döngü ----------------
 void loop() {
   static uint32_t sonRapor = 0, sonToplam = 0, tasma = 0, maxDolu = 0;
+  static int64_t sx = 0, sy = 0, sz = 0, qx = 0, qy = 0, qz = 0;  // gürültü için toplamlar (ham LSB, tamsayı: C3'te FPU yok)
+  static uint32_t ns = 0;
+  if (sonRapor == 0) sonRapor = millis();   // ilk pencere ölçüm başladığında başlasın
 
   if (oku(R_INT_SOURCE) & 0x01) tasma++;   // overrun: stream modunda FIFO doldu (s. 14)
   int n = oku(R_FIFO_STATUS) & 0x3F;
@@ -185,12 +207,19 @@ void loop() {
     int16_t x, y, z;
     okuXYZ(x, y, z);
     ornekIsle(x, y, z);
+    sx += x; sy += y; sz += z; qx += (int32_t)x * x; qy += (int32_t)y * y; qz += (int32_t)z * z; ns++;
   }
 
   if (millis() - sonRapor >= 5000) {
     sonRapor = millis();
-    Serial.printf("# ornek/s: %.1f, fifo_max_doluluk: %lu, tasma: %lu\n",
-                  (toplam - sonToplam) / 5.0, (unsigned long)maxDolu, (unsigned long)tasma);
+    // Standart sapma (ham LSB): kart hareketsizken gürültüyü gösterir
+    float stdX = ns > 1 ? sqrt(((double)qx - (double)sx * sx / ns) / (ns - 1)) : 0;
+    float stdY = ns > 1 ? sqrt(((double)qy - (double)sy * sy / ns) / (ns - 1)) : 0;
+    float stdZ = ns > 1 ? sqrt(((double)qz - (double)sz * sz / ns) / (ns - 1)) : 0;
+    Serial.printf("# ornek/s: %.1f, fifo_max_doluluk: %lu, tasma: %lu, std_lsb X/Y/Z: %.1f / %.1f / %.1f (n=%lu)\n",
+                  (toplam - sonToplam) / 5.0, (unsigned long)maxDolu, (unsigned long)tasma,
+                  stdX, stdY, stdZ, (unsigned long)ns);
+    sx = sy = sz = qx = qy = qz = 0; ns = 0;
     sonToplam = toplam;
     maxDolu = 0;
     tasma = 0;

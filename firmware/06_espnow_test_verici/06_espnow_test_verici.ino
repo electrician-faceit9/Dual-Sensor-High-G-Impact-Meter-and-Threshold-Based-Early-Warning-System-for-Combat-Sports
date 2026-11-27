@@ -105,7 +105,7 @@ void setup() {
 }
 
 const uint32_t KUTU_US = 250;
-const int KUTU_SAYISI = 80;
+const int KUTU_SAYISI = 400;   // 0–100 ms; son kutu 'üst sınırın üstü' (önceden 80 kutu = 20 ms)
 uint32_t hist[KUTU_SAYISI] = {0};
 uint32_t rttMin = 0xFFFFFFFF, rttMax = 0, rttSayi = 0;
 uint64_t rttToplam = 0;
@@ -134,8 +134,10 @@ void sonucuYaz() {
                 (unsigned long)(rttMin / 2), ort / 2, (unsigned long)(rttMax / 2));
   Serial.println("# Dagilim (RTT araligi: paket sayisi):");
   for (int i = 0; i < KUTU_SAYISI; i++) {
-    if (hist[i]) Serial.printf("#   %lu-%lu us: %lu\n", (unsigned long)(i * KUTU_US),
-                               (unsigned long)((i + 1) * KUTU_US), (unsigned long)hist[i]);
+    if (!hist[i]) continue;
+    if (i == KUTU_SAYISI - 1) Serial.printf("#   >= %lu us: %lu\n", (unsigned long)(i * KUTU_US), (unsigned long)hist[i]);
+    else Serial.printf("#   %lu-%lu us: %lu\n", (unsigned long)(i * KUTU_US),
+                       (unsigned long)((i + 1) * KUTU_US), (unsigned long)hist[i]);
   }
   Serial.println("# ==================");
 }
