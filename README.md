@@ -14,7 +14,7 @@ Dövüş sporlarında kafa darbelerini anlık ölçen, giyilebilir darbe ölçer
 
 - Sensör düğümünün donanımı: ADXL375 (±200 g, SPI), MPU6050 (6 eksen, I2C), ESP32-C3 SuperMini, Li-Po pil, TP4056 şarj ve koruma modülü, açma/kapama anahtarı.
 - Gömülü yazılım:
-  - ADXL375'i SPI ile hedef 3200 Hz'de okumak (gerçekleşen hız: 3187–3190 örnek/s, FIFO taşması 0; bkz. Hafta 5)
+  - ADXL375'i SPI ile hedef 3200 Hz'de okumak (gerçekleşen hız: 3187–3194 örnek/s, FIFO taşması 0; bkz. Hafta 5)
   - Halka tamponda darbe öncesi ve sonrası veriyi tutmak
   - Eşik aşımında olayı tetiklemek (eşik: ___ g, önerideki başlangıç değeri 10 g, doğrulanmalı)
   - Tepe ivme, darbe süresi, Δv ve HIC15'i hesaplamak
@@ -222,7 +222,7 @@ Gönderim aralığı: ___ s
 
 1. **Tetik eşiği:** Başlangıç değeri 10 g [doğrulanmalı]. Günlük hareketlerde (koşma, zıplama) yanlış alarm sayısı: ___
 2. **Seviye eşikleri:** Yeşil / Sarı / Kırmızı sınırları hangi ölçüte (tepe g, HIC15, Δv) ve hangi değerlere göre belirlenecek? ___
-3. **Örnekleme hızı:** ADXL375 3200 Hz'de FIFO ile kayıpsız okunabiliyor mu? Ölçülen örnek/s: 3187–3190, FIFO taşması 0 (breadboard, Hafta 5). Bu hızda durağan gürültü std ≈ 15/15/20 LSB (X/Y/Z), 800 Hz'te yarısı; hız ile gürültü arasındaki seçim açık
+3. **Örnekleme hızı:** ADXL375 3200 Hz'de FIFO ile kayıpsız okunabiliyor mu? Ölçülen örnek/s: 3187–3194, FIFO taşması 0 (breadboard, Hafta 5, iki oturum). Bu hızda durağan gürültü std ≈ 15/15/20 LSB (X/Y/Z), 800 Hz'te yarısı; hız ile gürültü arasındaki seçim açık
 4. **HIC15 nerede hesaplanacak:** Sensör düğümünde mi, bilgisayarda mı? Düğümde hesaplanırsa işlem süresi: ___ ms
 5. **Ham veri:** Yalnız olay özeti yeterli mi, yoksa darbe penceresinin ham dalga formu da (birden fazla pakette) gönderilmeli mi?
 6. **Zaman senkronizasyonu:** Vericinin µs saati ile alıcının/bilgisayarın saati nasıl eşleştirilecek? Gecikme ölçümü bu eşleştirmeye bağlı.
@@ -232,7 +232,7 @@ Gönderim aralığı: ___ s
 10. **Pil süresi:** ≥2 saat hedefi karşılanıyor mu? Ölçülen süre: ___
 11. **Montaj:** Kafa bandı ile kask montajı arasındaki tepe ivme farkı: ___
 12. **Δv referansı:** Düşürme testinde çarpma hızı düşme yüksekliğinden hesaplanacak. Hata kaynakları (sürtünme, sekme): ___
-13. **ADXL375 kartının doğrulanması:** DEVID ADXL345 ile aynı (0xE5). Durağanken Z ekseninin yaklaşık 20 LSB olması bekleniyor. Ölçülen: ___
+13. **ADXL375 kartının doğrulanması:** DEVID ADXL345 ile aynı (0xE5). Durağanken Z ekseninin yaklaşık 20 LSB olması bekleniyor. Ölçülen (Hafta 5, beş açılış): DEVID 0xE5; durgun ortalama Z = 12.66–15.22 LSB, X = 7.08–9.77 LSB, Y = 6.94–9.16 LSB. Z beklenenden düşük, X ve Y sıfırdan farklı; bu fark eksen ofsetlerinden olabilir (veri sayfası: 0 g ofset tipik ±400 mg, en kötü ±6000 mg). Altı yüzlü kalibrasyon: ___
 
 ---
 
