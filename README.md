@@ -16,7 +16,7 @@ Dövüş sporlarında kafa darbelerini anlık ölçen, giyilebilir darbe ölçer
 - Gömülü yazılım:
   - ADXL375'i SPI ile hedef 3200 Hz'de okumak (gerçekleşen hız: 3187–3194 örnek/s, FIFO taşması 0; bkz. Hafta 5)
   - Halka tamponda darbe öncesi ve sonrası veriyi tutmak
-  - Eşik aşımında olayı tetiklemek (eşik: ___ g, önerideki başlangıç değeri 10 g, doğrulanmalı)
+  - Eşik aşımında olayı tetiklemek (hedef eşik 8 g [7]; yazılımda şu an 10 g, doğrulanacak)
   - Tepe ivme, darbe süresi, Δv ve HIC15'i hesaplamak
   - Doyan (saturated) olayları işaretlemek
   - Olay paketini kablosuz göndermek
@@ -220,8 +220,8 @@ Gönderim aralığı: ___ s
 
 ## 6. Açık sorular
 
-1. **Tetik eşiği:** Başlangıç değeri 10 g [doğrulanmalı]. Günlük hareketlerde (koşma, zıplama) yanlış alarm sayısı: ___
-2. **Seviye eşikleri:** Yeşil / Sarı / Kırmızı sınırları hangi ölçüte (tepe g, HIC15, Δv) ve hangi değerlere göre belirlenecek? ___
+1. **Tetik eşiği:** Hedef 8 g: Muay Thai'de kullanılan ağız koruyucu sensörün kayıt tetiği [7]. Kart dururken 100 ms'lik penceredeki tepe 2.06–4.36 g (Hafta 5), yani 8 g'nin altında. Sensör kafa bandında/kaskta olacağı için (iMG dişe bağlı) uygunluğu denenecek. Günlük hareketlerde (koşma, zıplama) yanlış alarm sayısı: ___
+2. **Seviye eşikleri:** İlk sürüm tepe doğrusal ivmeye göre: Yeşil < 66 g, Sarı 66–106 g, Kırmızı > 106 g [7], [8]. Bunlar tanı sınırı değil, risk çerçevesi çapaları. Açısal ivme bantları (4600 / 7900 rad/s²) için MPU6050'nin açısal hızından açısal ivme türetilmesi gerekiyor: ___. HIC15 ve Δv'nin seviyeye katkısı: ___
 3. **Örnekleme hızı:** ADXL375 3200 Hz'de FIFO ile kayıpsız okunabiliyor mu? Ölçülen örnek/s: 3187–3194, FIFO taşması 0 (breadboard, Hafta 5, iki oturum). Bu hızda durağan gürültü std ≈ 15/15/20 LSB (X/Y/Z), 800 Hz'te yarısı; hız ile gürültü arasındaki seçim açık
 4. **HIC15 nerede hesaplanacak:** Sensör düğümünde mi, bilgisayarda mı? Düğümde hesaplanırsa işlem süresi: ___ ms
 5. **Ham veri:** Yalnız olay özeti yeterli mi, yoksa darbe penceresinin ham dalga formu da (birden fazla pakette) gönderilmeli mi?
@@ -240,6 +240,8 @@ Gönderim aralığı: ___ s
 
 İncelenen çalışmalarda giyilebilir ataletsel algılayıcılarla düşme ve darbe tespiti yaygın olmakla birlikte, doğrulama çoğunlukla sınıflandırma başarımı ve gecikme ölçütleriyle yapılmış, algılayıcının ölçtüğü ivmenin bir referansa göre doğruluğu nadiren raporlanmıştır [4], [5]. Kask tabanlı bir IoT sistemi darbe ve düşmeyi algılayıp gerçek zamanlı uyarı göndermekte, ancak ivme ölçümünün doğruluğuna ilişkin bir değerlendirme sunmamaktadır [1]. Tepe kafa ivmesi ve HIC15 gibi kafa yaralanması ölçütleri araç-yaya çarpışması bağlamında çok gövdeli model ve manken deneyleriyle incelenmiş, giyilebilir bir algılayıcıyla ölçülmemiştir [2]. Referans ivmeölçerle algılayıcı düzeyinde metrolojik karakterizasyon yapan çalışma düşük genlik (1–4 m/s²) ve düşük frekans (1–8 Hz) aralığıyla sınırlı kalmış [3], yüksek g darbeler altında doyma ve ölçüm aralığı davranışı ise algılayıcı tasarımı çalışmalarında ele alınmamıştır [6]. Bu proje, ±200 g'lik bir ivmeölçeri kontrollü düşürme deneylerinde düşme yüksekliğinden hesaplanan çarpma hızına göre doğrulayarak ve doyan olayları işaretleyerek, incelenen çalışmalardaki bu boşluğun algılayıcı düzeyindeki kısmına yanıt vermeyi amaçlamaktadır.
 
+**Dövüş sporlarında kafa darbesi ölçümü.** Dövüş sporlarında kafa darbesi maruziyeti son çalışmalarda ağız koruyucuya yerleştirilmiş ivmeölçer ve jiroskoplarla (iMG) ölçülmekte; Muay Thai'de 1000 Hz örnekleyen ve bileşke doğrusal ivme 8 g'yi aşınca kayda başlayan bir iMG ile yedi idmanda 590 darbe kaydedilmiştir [7]. Bu kayıtlarda idman ortalaması tepe doğrusal ivme 7.6–19.5 g, en büyük tepe doğrusal ivme 162.2 g ve en büyük tepe açısal ivme 26 850 rad/s² olmuştur [7]. Şiddet sınıflandırmasında 66 g / 4600 rad/s², 82 g / 5900 rad/s² ve 106 g / 7900 rad/s² çiftleri hafif travmatik beyin hasarı olasılığının %25, %50 ve %80'ine karşılık gelen çapa değerler olarak kullanılmış, yazarlar bunların tanı sınırı değil risk çerçevesi olduğunu vurgulamıştır [7], [8]. Aynı çalışma, sonuçların cihaza ve üreticinin kapalı sinyal işleme zincirine bağlı olduğunu, ham zaman serisine erişilemediğini ve video doğrulaması yapılmadığını sınırlılık olarak belirtmektedir [7]. Bu proje, ham veriye erişilebilen açık bir donanım ve yazılım zinciriyle (±200 g ADXL375, 3200 Hz) aynı ölçütleri (tepe doğrusal ivme, tetik eşiği, şiddet bantları) kafa bandı veya kask üzerinde ölçmeyi ve doğrulamayı hedeflemektedir.
+
 ### Kaynaklar
 
 1. ___, "Intelligent Life Guard: An IoT-Enabled Smart Helmet for Vital Monitoring & Fall Detection," *International Journal of Drug Delivery Technology*, 2026. doi: [10.25258/ijddt.16.35s.5](https://doi.org/10.25258/ijddt.16.35s.5)
@@ -248,26 +250,35 @@ Gönderim aralığı: ___ s
 4. C.-K. Tseng, S.-J. Huang, L.-J. Kau, "Wearable Fall Detection System with Real-Time Localization and Notification Capabilities," *Sensors*, vol. 25, no. 12, art. 3632, 2025. doi: [10.3390/s25123632](https://doi.org/10.3390/s25123632)
 5. ___, "Machine Learning-Based Framework for Pre-Impact Same-Level Fall and Fall-from-Height Detection in Construction Sites Using a Single Wearable Inertial Measurement Unit," *Biosensors*, 2025. doi: [10.3390/bios15090618](https://doi.org/10.3390/bios15090618)
 6. ___, "Square-ring mass triaxial piezoresistive accelerometer with decoupled sensing elements for matched three-axis performance," *Microsystem Technologies*, 2026. doi: [10.1007/s00542-026-06162-6](https://doi.org/10.1007/s00542-026-06162-6)
+7. L. Del Vecchio, M. Climstein, D. A. Brown, "Quantifying Head Impacts in Elite Muay Thai: A Case Study Using Instrumented Mouthguards," *Sports*, vol. 14, art. 111, 2026. doi: [10.3390/sports14030111](https://doi.org/10.3390/sports14030111)
+8. A. E. Jansen, M. McGrath, S. Samorezov, J. Johnston, A. Bartsch, J. Alberts, "Characterizing Head Impact Exposure in Men and Women During Boxing and Mixed Martial Arts," *Orthopaedic Journal of Sports Medicine*, vol. 9, 2021. (66 / 82 / 106 g çapaları [7] üzerinden aktarıldı; özgün makale henüz okunmadı.)
+9. C. Bolger, J. Mara, B. Field, D. B. Pyne, A. J. McKune, "Methods for Capturing and Quantifying Contact Events in Collision Sports," *Sports*, vol. 13, no. 4, art. 102, 2025. doi: [10.3390/sports13040102](https://doi.org/10.3390/sports13040102)
 
-> Not: Bu özet, 12 makalelik bir [karşılaştırma tablosundaki](literature-comparison.pdf) çalışmalara dayanır. "Ele alınmamıştır" ifadeleri yalnızca bu küme için geçerlidir.
+> Not: İlk paragraf 12 makalelik bir [karşılaştırma tablosundaki](literature-comparison.pdf) çalışmalara dayanır; "ele alınmamıştır" ifadeleri yalnızca bu küme için geçerlidir. Dövüş sporu paragrafı [7]'ye dayanır; [7] ve [9] ikinci karşılaştırma tablosunda da yer alıyor. "wearable impact sensor combat sports head acceleration threshold" konusu için yapılan taramada (scienceaijournal.com, 27 Kasım 2026) eşleşen 101 makaleden yalnız 3'ü karşılaştırma tablosu için yeterli ayrıntı içerdiğinden tablo oluşturulamadı; bu, konunun literatürde az çalışıldığını gösteriyor.
 
 ## Literatür Karşılaştırması
 
-Ayrıntılı tablo: [literature-comparison.pdf](literature-comparison.pdf)
+Ayrıntılı tablolar (scienceaijournal.com, her biri 12 tam metin makale):
+- [literature-comparison.pdf](literature-comparison.pdf): "wearable head impact sensor high-g accelerometer drop test validation" (11 Kasım 2026). Çoğunlukla düşme tespiti ve algılayıcı karakterizasyonu.
+- [literature-comparison2.pdf](literature-comparison2.pdf): "head impact kinematics wearable sensors contact sports" (27 Kasım 2026). Temas sporları, ağız koruyucu sensörler, dövüş sporu.
 
 ### 1. En yakın çalışmalar
 - **Genel olarak en yakın:** *Wearable Fall Detection System with Real-Time Localization and Notification Capabilities* (Sensors, 2025). Giyilebilir bir mikrodenetleyici ve ataletsel sensör kullanıyor, olayı cihazın üzerinde düşük karmaşıklıklı bir algoritmayla (sonlu durum makinesi) tespit ediyor ve kablosuz uyarı gönderiyor. Bizim mimarimiz de aynı.
 - **Ölçtüğü büyüklük en yakın olan:** *Contact-Triggered Active Bonnet System for Pedestrian Head Injury Mitigation* (Sensors, 2026). Tablodaki çalışmalardan tepe kafa ivmesi ve HIC15 kullanan tek çalışma bu. Bizim ÖZET paketimizde de `tepe_ivme_bilesik` ve `hic15` alanları var.
+- **Konu olarak en yakın (2. tablo):** *Quantifying Head Impacts in Elite Muay Thai: A Case Study Using Instrumented Mouthguards* (Sports, 2026) [7]. Dövüş sporunda kafa darbesini giyilebilir sensörle ölçüyor; tetik eşiği, örnekleme hızı ve şiddet bantları README'deki hedef değerlerin kaynağı.
+- **Eşik seçimi için (2. tablo):** *Methods for Capturing and Quantifying Contact Events in Collision Sports* (Sports, 2025) [9]. Çarpışma sporlarında (ragbi) giyilebilir MEMS ile temas algılamada kullanılan eşiklerin 1–8 g arasında değiştiğini ve en doğru eşiğin cinsiyete ve oyuncu mevkiine göre farklılaştığını bildiriyor; kadınlarda duyarlılık (recall) erkeklerden düşük (%45'e karşı %69).
 - **Kafaya takılan tek çalışma:** *Intelligent Life Guard: An IoT-Enabled Smart Helmet* (2026). Ancak darbe ölçmüyor, düşme ve vital bulguları izliyor.
 
 ### 2. Projemizin cevap verdiği boşluk
-Tablonun kendi özeti ortak boşluğu şöyle tarif ediyor: hiçbir çalışma yüksek g aralığını hedeflemiyor ve kafa darbesi sensörü için kalibre edilmiş düşürme testi yapmıyor. Kaput çalışması da giyilebilir sensör yerine simülasyon ve manken kullanıyor. Bizim proje bu boşluğa doğrudan yöneliyor: kafaya takılan, ±200 g aralığındaki ADXL375 ile darbeyi ölçmek ve eşiğe göre triyaj yapmak. Düşürme testi sonuçları: ___
+Tablonun kendi özeti ortak boşluğu şöyle tarif ediyor: hiçbir çalışma yüksek g aralığını hedeflemiyor ve kafa darbesi sensörü için kalibre edilmiş düşürme testi yapmıyor. Kaput çalışması da giyilebilir sensör yerine simülasyon ve manken kullanıyor. İkinci tablonun özeti de benzer bir boşluğu tarif ediyor: altın standart bir referansa göre doğrulama sütunu büyük ölçüde boş, birkaç çalışma saha koşullarında doğrulama eksikliğini ana araştırma boşluğu olarak belirtiyor ve çalışma örneklemleri çok küçük (tek bir Muay Thai sporcusu gibi). Bizim proje bu boşluğa doğrudan yöneliyor: kafaya takılan, ±200 g aralığındaki ADXL375 ile darbeyi ölçmek ve eşiğe göre triyaj yapmak. Düşürme testi sonuçları: ___
 
 ### 3. Ortak ölçütler
 | Ölçüt | Kullanan çalışma | Bizde |
 |---|---|---|
 | Tepe kafa ivmesi, HIC15 | Active Bonnet (Sensors, 2026) | ÖZET paketinde var, ölçüm ___ |
-| Örnekleme hızı | Smartwatch metrolojisi (50 Hz), Konumlu düşme sistemi (100 Hz) | Hedef 3200 Hz |
+| Örnekleme hızı | Smartwatch metrolojisi (50 Hz), Konumlu düşme sistemi (100 Hz), Muay Thai iMG (1000 Hz) [7] | Hedef 3200 Hz, ölçülen 3187–3194 örnek/s |
+| Kayıt tetik eşiği | Muay Thai iMG: bileşke doğrusal ivme > 8 g [7]; ragbi MEMS temas algılama: 1–8 g, cinsiyet ve mevkiye göre değişiyor [9] | Hedef 8 g, yazılımda şu an 10 g |
+| Şiddet bantları (tepe doğrusal ivme) | Muay Thai iMG: < 66 g, 66–106 g, > 106 g [7], [8] | Yeşil / Sarı / Kırmızı için kullanılacak |
 | Ortalama akım | Konumlu düşme sistemi (5 mA) | ___ |
 | Gecikme / önceden uyarı süresi | Ön-çarpma düşme (Biosensors, 2025): pencere başına 1.51×10⁻³ ms, 402/640 ms öncü süre |
 
@@ -277,13 +288,13 @@ Kural: kaynağı olmayan değer ___ bırakıldı. "Ölçülen" değerler Hafta 5
 
 | Alan | Hedef | Gerekçe | Kaynak |
 |---|---|---|---|
-| Darbe eşiği | ___ | Karşılaştırmadaki çalışmaların hiçbiri dövüş sporunda kafa darbesi için eşik vermiyor. Ölçülen alt sınır: kart dururken 100 ms'lik penceredeki tepe bileşke ivme 2.06–4.36 g; eşik bunun üstünde olmalı. Yazılımdaki 10 g yalnız test değeri. | literature-comparison.pdf; Hafta 5 ölçümü |
-| Seviye sınırları (Yeşil / Sarı / Kırmızı) | ___ | Tablodaki tek kafa ivmesi verisi araç-yaya çarpışmasından (tepe 84 m/s², HIC15 264) ve simülasyon/manken ile elde edilmiş; giyilebilir sensörle dövüş sporu için sınır olarak kullanılamaz. | Active Bonnet (Sensors, 2026) |
-| Örnekleme hızı | 3200 Hz | Literatürdeki 50 Hz ve 100 Hz yavaş vücut hareketi için; darbe için değer yok. ADXL375'in en yüksek çıkış hızı seçildi. Ölçülen: 3187–3194 örnek/s, FIFO taşması 0. Bu hızda durağan gürültü std ≈ 15/15/20 LSB (X/Y/Z), 800 Hz'te yarısı. | ADXL375 veri sayfası (Analog Devices); Smartwatch metrolojisi (50 Hz), Konumlu düşme sistemi (100 Hz) |
+| Darbe eşiği (kayıt tetiği) | 8 g | Dövüş sporunda (Muay Thai) ağız koruyucu sensör, bileşke doğrusal ivme 8 g'yi aşınca kayda başlıyor. Bizde kart dururken 100 ms'lik tepe 2.06–4.36 g, eşiğin altında. Sensör yeri farklı (iMG dişe bağlı, bizimki kafa bandı/kask). Çarpışma sporlarında kullanılan eşikler 1–8 g arasında değişiyor ve en doğru eşik sporcuya ve mevkiye göre farklı; bu yüzden 8 g bizim düzenekte yanlış alarm testiyle doğrulanacak: ___. Yazılımda henüz 10 g. | [7] s. 4–5; [9]; Hafta 5 ölçümü |
+| Seviye sınırları (Yeşil / Sarı / Kırmızı) | Yeşil < 66 g, Sarı 66–106 g, Kırmızı > 106 g (tepe doğrusal ivme) | Muay Thai çalışmasındaki PLA bantları. 66 / 82 / 106 g, hafif travmatik beyin hasarı olasılığının %25 / %50 / %80'ine karşılık gelen çapalar; yazarlara göre tanı sınırı değil, risk çerçevesi. Açısal bantlar (4600 / 7900 rad/s²) için açısal ivme gerekiyor, MPU6050 açısal hız ölçüyor: ___. | [7] s. 2, 7; [8] |
+| Örnekleme hızı | 3200 Hz | Dövüş sporu iMG'si ivme ve jiroskopta 1000 Hz kullanıyor; düşme ve akıllı saat çalışmalarındaki 50–100 Hz yavaş vücut hareketi için. ADXL375'in en yüksek hızı seçildi. Ölçülen 3187–3194 örnek/s, FIFO taşması 0; gürültü 800 Hz'te yarıya iniyor. Ölçüm aralığı: Muay Thai'de kaydedilen en büyük tepe 162.2 g, ADXL375'in ±200 g aralığında. | [7] s. 4, 6; ADXL375 veri sayfası; Hafta 5 ölçümü |
 | Gecikme (darbe → uyarı) | ___ | Literatürdeki tek eşik 130 ms hava yastığı şişme süresi; iş güvenliği bağlamında, dövüş sporuna uymuyor. Ölçülen: tetikten yankıya 102.7–104.4 ms (≈100 ms özet penceresi dahil); kablosuz tek yön tahmini ortanca ≈1.4 ms (kalabalık kafe, RTT/2). | Ön-çarpma düşme (Biosensors, 2025); Hafta 5 ölçümü |
 | Ortalama akım | ___ | Literatürdeki tek değer 5 mA (100 Hz, GPS/NB-IoT'li düşme cihazı); ESP32-C3 + ESP-NOW donanımımızdan farklı. Akım henüz ölçülmedi. | Konumlu düşme sistemi |
 
-Kaynaklar: literature-comparison.pdf içindeki makaleler, ADXL375 veri sayfası (Analog Devices) ve Hafta 5 ölçümleri ([docs/hafta5_sensor_dogrulama.md](docs/hafta5_sensor_dogrulama.md)).
+Kaynaklar: [7] Del Vecchio vd. 2026, [8] Jansen vd. 2021 ve [9] Bolger vd. 2025 (bkz. 7. bölüm Kaynaklar), literature-comparison.pdf içindeki makaleler, ADXL375 veri sayfası (Analog Devices) ve Hafta 5 ölçümleri ([docs/hafta5_sensor_dogrulama.md](docs/hafta5_sensor_dogrulama.md)).
 
 ## Haftalık Notlar
 
